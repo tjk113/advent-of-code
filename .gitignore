@@ -1,0 +1,5 @@
+# Ignore executables
+# https://stackoverflow.com/a/74598311
+*
+!*.*
+!*/
