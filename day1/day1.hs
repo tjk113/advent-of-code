@@ -10,7 +10,7 @@ main = do
   let xs = sort [fst p | p <- pairs]
   let ys = sort [snd p | p <- pairs]
   let len = length xs
-  -- Because the lists are pre-sorted, `list !! (n - 1)`
+  -- Because the lists are pre-sorted, `list !! n`
   -- returns the nth smallest element of `list`.
-  printf "Part 1: %d\n" (sum [abs ((xs !! n) - (ys !! n)) | n <- [len-1,len-2..0]])
-  printf "Part 2: %d\n" (sum [x * (count x ys) | x <- xs])
+  printf "Part 1: %d\n" (sum [abs ((xs !! n) - (ys !! n)) | n <- [0..len-1]])
+  printf "Part 2: %d\n" (sum [x * count x ys | x <- xs])
