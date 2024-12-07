@@ -1,10 +1,21 @@
 import copy
 
+dirs = ['<', '>', '^', 'v']
+
 def find_guard(m):
     for line in m:
         for col in line:
-            if col in ['<', '>', '^', 'v']:
+            if col in dirs:
                 return ((m.index(line), line.index(col)), col)
+
+def rotate(guard):
+    rotated = guard
+    match guard:
+        case '<': rotated = '^'
+        case '^': rotated = '>'
+        case '>': rotated = 'v'
+        case 'v': rotated = '<'
+    return rotated
 
 visited = set()
 def run_guard_ai(m, guard, track_visits=True):
@@ -24,20 +35,13 @@ def run_guard_ai(m, guard, track_visits=True):
         case '^': should_turn = m[pos[0]-1][pos[1]] == '#'
         case 'v': should_turn = m[pos[0]+1][pos[1]] == '#'
     if should_turn:
+        rotated = rotate(facing)
         match facing:
-            case '<':
-                m[pos[0]] = m[pos[0]].replace(facing, '^')
-                facing = '^'
-            case '>':
-                m[pos[0]] = m[pos[0]].replace(facing, 'v')
-                facing = 'v'
-            case '^':
-                m[pos[0]] = m[pos[0]].replace(facing, '>')
-                facing = '>'
-            case 'v':
-                m[pos[0]] = m[pos[0]].replace(facing, '<')
-                facing = '<'
-        return (m, (pos, facing))
+            case '<': m[pos[0]] = m[pos[0]].replace(facing, rotated)
+            case '>': m[pos[0]] = m[pos[0]].replace(facing, rotated)
+            case '^': m[pos[0]] = m[pos[0]].replace(facing, rotated)
+            case 'v': m[pos[0]] = m[pos[0]].replace(facing, rotated)
+        return (m, (pos, rotated))
     else:
         match facing:
             case '<':
@@ -70,7 +74,7 @@ def find_possible_loops(m, guard):
     positions = 0
     visited.remove(guard[0])
     for point in visited:
-        print(f'checking {point}')
+        # print(f'checking {point}')
         new = m.copy()
         tmp = list(new[point[0]])
         tmp[point[1]] = '#'
@@ -104,6 +108,6 @@ with open('input.txt', 'r') as file:
             break
         else:
             m, guard = m
-    print(f'Part 1: {len(set(visited))+1}')
+    print(f'Part 1: {len(set(visited))}')
     loops = find_possible_loops(_m, _guard)
     print(f'Part 2: {loops}')
