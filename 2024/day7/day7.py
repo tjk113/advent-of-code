@@ -10,7 +10,7 @@ def run(lines, part_2):
             results = list(it.chain.from_iterable(map(f, results)))
         if int(res) in results: sum += int(res)
     return sum
-with open('test.txt', 'r') as file:
+with open('input.txt', 'r') as file:
     lines = list(map(lambda l: l.strip(), file.readlines()))
     print(f'Part 1: {run(lines, False)}')
     print(f'Part 2: {run(lines, True)}')
